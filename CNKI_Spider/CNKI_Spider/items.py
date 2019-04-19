@@ -8,7 +8,16 @@
 import scrapy
 
 
-class CnkiSpiderItem(scrapy.Item):
+class CNKISpiderItem(scrapy.Item):
     # define the fields for your item here like:
     # name = scrapy.Field()
+    title = scrapy.Field()
+    title_url = scrapy.Field()
+    author = scrapy.Field()
+    source = scrapy.Field()
+    issue_time = scrapy.Field()
+    database = scrapy.Field()
+    is_cited = scrapy.Field()
+    is_downloaded = scrapy.Field()
+    abstract = scrapy.Field()
     pass
