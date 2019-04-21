@@ -5,7 +5,7 @@
       <sourceFolder url="file://$MODULE_DIR$/mukewang_Spider" isTestSource="false" />
       <sourceFolder url="file://$MODULE_DIR$/CNKI_Spider" isTestSource="false" />
     </content>
-    <orderEntry type="inheritedJdk" />
+    <orderEntry type="jdk" jdkName="Python 3.7" jdkType="Python SDK" />
     <orderEntry type="sourceFolder" forTests="false" />
   </component>
   <component name="TestRunnerService">
