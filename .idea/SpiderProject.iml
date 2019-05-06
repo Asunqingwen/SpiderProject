@@ -4,6 +4,9 @@
     <content url="file://$MODULE_DIR$">
       <sourceFolder url="file://$MODULE_DIR$/mukewang_Spider" isTestSource="false" />
       <sourceFolder url="file://$MODULE_DIR$/CNKI_Spider" isTestSource="false" />
+      <sourceFolder url="file://$MODULE_DIR$/LagouSpider" isTestSource="false" />
+      <sourceFolder url="file://$MODULE_DIR$/ZhaopinSpider" isTestSource="false" />
+      <sourceFolder url="file://$MODULE_DIR$/WuyouJobSpider" isTestSource="false" />
     </content>
     <orderEntry type="inheritedJdk" />
     <orderEntry type="sourceFolder" forTests="false" />
