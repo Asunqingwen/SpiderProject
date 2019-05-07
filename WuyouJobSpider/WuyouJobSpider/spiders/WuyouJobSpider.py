@@ -21,6 +21,7 @@ from queue import Queue
 from bs4 import BeautifulSoup
 from wordcloud import WordCloud
 from pyquery import PyQuery as pq
+from itertools import chain
 
 
 def get_logger():
@@ -42,13 +43,14 @@ HEADERS = {
 }
 
 START_URL = (
-	"https://search.51job.com/list/020000,000000,0000,00,9,99,python,2,1.html"
+	"https://search.51job.com/list/000000,000000,0000,00,9,99,python,2,1.html"
 	"?lang=c&stype=&postchannel=0000&workyear=99&cotype=99&degreefrom=99&jobterm=99&companysize=99&providesalary=99&lonlat=0%2C0"
 	"&radius=-1&ord_field=0&confirmdate=9&fromType=&dibiaoid=0&address=&line=&specialarea=00&from=&welfare="
 )
 
 LOG_LEVEL = logging.INFO  # 日志等级
 POOL_MAXSIZE = 8  # 线程池最大容量
+INFO_NAME = ['title', 'href', 'company', 'location', 'salary', 'time']
 
 logger = get_logger()
 
@@ -74,23 +76,29 @@ class WuyouJobSpider:
 		html = requests.get(START_URL, headers=HEADERS)
 		html.encoding = 'gbk'
 		doc = pq(html.text)
-		# bs = BeautifulSoup(html, "lxml").find("div", class_="dw_table").find_all(
-		# 	"div", class_="el"
-		# )
-		# for b in bs:
-		# 	try:
-		# 		href, post = b.find("a")["href"], b.find("a")["title"]
-		# 		locate = b.find("span", class_="t3").text
-		# 		salary = b.find("span", class_="t4").text
-		# 		item = {
-		# 			"href": href, "post": post, "locate": locate, "salary": salary
-		# 		}
-		# 		self.desc_url_queue.put(href)  # 岗位详情链接加入队列
-		# 		self.company.append(item)
-		# 	except Exception:
-		# 		pass
-		# # 打印队列长度,即多少条岗位详情 url
-		# logger.info("队列长度为 {} ".format(self.desc_url_queue.qsize()))
+		try:
+			t1_list, t2_list, t3_list, t4_list, t5_list = doc(".t1 a").items(), doc(".t2 a").items(), doc(".t3").items(), doc(".t4").items(), doc(".t5").items()
+			info_list = [item for item in
+			             zip(t3_list, t4_list, t5_list)]
+			print(info_list[0][0].text())
+			for t1, info in zip(t1_list, info_list):
+				title, href = [t1.attr("title"), t1.attr("href")]
+				info = [title, href].extend(info)
+				item = dict(zip(INFO_NAME, info))
+				print(item)
+		# locate = b.find("span", class_="t3").text
+		# salary = b.find("span", class_="t4").text
+		# item = {
+		# 	"href": href, "post": post, "locate": locate, "salary": salary
+		# }
+		# self.desc_url_queue.put(href)  # 岗位详情链接加入队列
+		# self.company.append(item)
+		except Exception as e:
+			print(e)
+			pass
+
+	# # 打印队列长度,即多少条岗位详情 url
+	# logger.info("队列长度为 {} ".format(self.desc_url_queue.qsize()))
 
 	def post_require(self):
 		"""
@@ -316,8 +324,10 @@ class WuyouJobSpider:
 		多线程爬取数据
 		"""
 		self.job_spider()
-		# self.execute_more_tasks(self.post_require)
-		# self.desc_url_queue.join()  # 主线程阻塞,等待队列清空
+
+
+# self.execute_more_tasks(self.post_require)
+# self.desc_url_queue.join()  # 主线程阻塞,等待队列清空
 
 
 if __name__ == "__main__":
@@ -327,10 +337,10 @@ if __name__ == "__main__":
 	spider.run()
 	logger.info("总耗时 {} 秒".format(time.time() - start))
 
-	# 按需启动
-	# spider.post_salary_locate()
-	# spider.post_salary()
-	# spider.insert_into_db()
-	# spider.post_salary_counter()
-	# spider.post_counter()
-	# spider.world_cloud()
+# 按需启动
+# spider.post_salary_locate()
+# spider.post_salary()
+# spider.insert_into_db()
+# spider.post_salary_counter()
+# spider.post_counter()
+# spider.world_cloud()
