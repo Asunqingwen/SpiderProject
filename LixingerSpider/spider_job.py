@@ -2,6 +2,7 @@ import csv
 import json
 
 import requests
+from tqdm import tqdm
 
 from logging_job import logger
 
@@ -24,37 +25,39 @@ pb_csv_payloadData = {"stockIds": "", "dateFlag": "week", "granularity": "f_s",
 def get_csv():
 	r = requests.post(data_list_url, data=json.dumps(data_list_payloadData), headers=payloadHeader)
 	data_list = json.loads(r.text)
-	for data in data_list:
-		zhishu_name = data["cnName"]
-		logger.info("{}的PE和PB数据正在收集........".format(zhishu_name))
-		pe_ttm_csv_payloadData["stockIds"] = [data["stockId"]]
-		pb_csv_payloadData["stockIds"] = [data["stockId"]]
-		try:
-			pe_ttm_csv = requests.post(detail_csv_url, data=json.dumps(pe_ttm_csv_payloadData), headers=payloadHeader)
-			pb_csv = requests.post(detail_csv_url, data=json.dumps(pb_csv_payloadData), headers=payloadHeader)
-			pe_ttm_csv_data = json.loads(pe_ttm_csv.text)
-			pb_csv_data = json.loads(pb_csv.text)
+	with tqdm(data_list) as data_list:
+		for data in data_list:
+			zhishu_name = data["cnName"]
+			data_list.set_description("%s指数的PE和PB数据正在收集........" % zhishu_name)
+			logger.info("{}的PE和PB数据正在收集........".format(zhishu_name))
+			pe_ttm_csv_payloadData["stockIds"] = [data["stockId"]]
+			pb_csv_payloadData["stockIds"] = [data["stockId"]]
+			try:
+				pe_ttm_csv = requests.post(detail_csv_url, data=json.dumps(pe_ttm_csv_payloadData), headers=payloadHeader)
+				pb_csv = requests.post(detail_csv_url, data=json.dumps(pb_csv_payloadData), headers=payloadHeader)
+				pe_ttm_csv_data = json.loads(pe_ttm_csv.text)
+				pb_csv_data = json.loads(pb_csv.text)
 
-			pe_ttm_csv_data = reversed(pe_ttm_csv_data)
-			pb_csv_data = reversed(pb_csv_data)
+				pe_ttm_csv_data = reversed(pe_ttm_csv_data)
+				pb_csv_data = reversed(pb_csv_data)
 
-			headers = ['date', 'pe_ttm', "pb"]
-			with open("./CsvFiles/{}.csv".format(zhishu_name), "w", newline="") as f:
-				f_csv = csv.DictWriter(f, headers)
-				f_csv.writeheader()
-				if zhishu_name != "恒生指数":
-					for pe_ttm_data, pb_data in zip(pe_ttm_csv_data, pb_csv_data):
-						row = dict(
-							zip(headers, [pe_ttm_data['date'].split("T")[0], pe_ttm_data["pe_ttm"]["weightedAvg"],
-							              pb_data["pb"]["weightedAvg"]]))
-						f_csv.writerow(row)
-				else:
-					for pe_ttm_data, pb_data in zip(pe_ttm_csv_data, pb_csv_data):
-						if pe_ttm_data["pe_ttm"]:
+				headers = ['date', 'pe_ttm', "pb"]
+				with open("./CsvFiles/{}.csv".format(zhishu_name), "w", newline="") as f:
+					f_csv = csv.DictWriter(f, headers)
+					f_csv.writeheader()
+					if zhishu_name != "恒生指数":
+						for pe_ttm_data, pb_data in zip(pe_ttm_csv_data, pb_csv_data):
 							row = dict(
 								zip(headers, [pe_ttm_data['date'].split("T")[0], pe_ttm_data["pe_ttm"]["weightedAvg"],
 								              pb_data["pb"]["weightedAvg"]]))
 							f_csv.writerow(row)
-		except Exception as e:
-			logger.error(e)
-		logger.info("{}的PE和PB数据已完成收集........".format(zhishu_name))
+					else:
+						for pe_ttm_data, pb_data in zip(pe_ttm_csv_data, pb_csv_data):
+							if pe_ttm_data["pe_ttm"]:
+								row = dict(
+									zip(headers, [pe_ttm_data['date'].split("T")[0], pe_ttm_data["pe_ttm"]["weightedAvg"],
+									              pb_data["pb"]["weightedAvg"]]))
+								f_csv.writerow(row)
+			except Exception as e:
+				logger.error(e)
+			logger.info("{}的PE和PB数据已完成收集........".format(zhishu_name))

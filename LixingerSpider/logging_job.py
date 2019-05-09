@@ -18,8 +18,8 @@ def get_logger():
 	file = handlers.TimedRotatingFileHandler(filename="./log", when='D', backupCount=30, encoding='utf-8')
 	file.setFormatter(formatter)
 
-	logger.addHandler(cmd)
-	logger.addHandler(file)
+	# logger.addHandler(cmd)  #输出到console
+	logger.addHandler(file)  #输出到log文件
 	return logger
 
 
