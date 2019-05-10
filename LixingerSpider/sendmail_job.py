@@ -16,4 +16,4 @@ def sendCsv(csv_path, jpg_path):
 	}
 
 	server = zmail.server(emailName, password)
-	server.send_mail(send_mail, mail_content)
+	a = server.send_mail(send_mail, mail_content)
