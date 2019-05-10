@@ -13,4 +13,4 @@ if __name__ == '__main__':
 	zhishu_temperature()
 	logger.info("完成所有指数的温度计算总耗时 {}".format(datetime.now() - start))
 
-	sendCsv("./latest_temperature.csv", "./zhishu.jpb")
+	sendCsv("./latest_temperature.csv", "./zhishu.jpg")
