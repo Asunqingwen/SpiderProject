@@ -19,7 +19,7 @@ def get_logger():
 	file.setFormatter(formatter)
 
 	# logger.addHandler(cmd)  #输出到console
-	logger.addHandler(file)  #输出到log文件
+	logger.addHandler(file)  # 输出到log文件
 	return logger
 
 

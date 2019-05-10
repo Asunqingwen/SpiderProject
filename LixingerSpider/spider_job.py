@@ -33,7 +33,8 @@ def get_csv():
 			pe_ttm_csv_payloadData["stockIds"] = [data["stockId"]]
 			pb_csv_payloadData["stockIds"] = [data["stockId"]]
 			try:
-				pe_ttm_csv = requests.post(detail_csv_url, data=json.dumps(pe_ttm_csv_payloadData), headers=payloadHeader)
+				pe_ttm_csv = requests.post(detail_csv_url, data=json.dumps(pe_ttm_csv_payloadData),
+				                           headers=payloadHeader)
 				pb_csv = requests.post(detail_csv_url, data=json.dumps(pb_csv_payloadData), headers=payloadHeader)
 				pe_ttm_csv_data = json.loads(pe_ttm_csv.text)
 				pb_csv_data = json.loads(pb_csv.text)
@@ -55,8 +56,9 @@ def get_csv():
 						for pe_ttm_data, pb_data in zip(pe_ttm_csv_data, pb_csv_data):
 							if pe_ttm_data["pe_ttm"]:
 								row = dict(
-									zip(headers, [pe_ttm_data['date'].split("T")[0], pe_ttm_data["pe_ttm"]["weightedAvg"],
-									              pb_data["pb"]["weightedAvg"]]))
+									zip(headers,
+									    [pe_ttm_data['date'].split("T")[0], pe_ttm_data["pe_ttm"]["weightedAvg"],
+									     pb_data["pb"]["weightedAvg"]]))
 								f_csv.writerow(row)
 			except Exception as e:
 				logger.error(e)
