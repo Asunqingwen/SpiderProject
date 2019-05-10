@@ -47,7 +47,7 @@ def get_csv():
 				pb_csv_data = reversed(pb_csv_data)
 
 				headers = ['date', 'pe_ttm', "pb"]
-				with open(os.path.join(ROOT_PATH, "{}.csv".format(zhishu_name)), "w", newline="") as f:
+				with open(os.path.join(ROOT_PATH, "{}.csv".format(zhishu_name)), "w", encoding="gbk", newline="") as f:
 					f_csv = csv.DictWriter(f, headers)
 					f_csv.writeheader()
 					if zhishu_name != "恒生指数":

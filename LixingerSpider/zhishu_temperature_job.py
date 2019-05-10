@@ -58,7 +58,7 @@ def zhishu_temperature():
 				                                   [date[-1], zhishu_name, pe_ttm_temperature[-1], pb_temperature[-1],
 				                                    avg_temperature[-1]])))
 
-			with open(csv_path, "w", newline="") as f:
+			with open(csv_path, "w", encoding="gbk", newline="") as f:
 				f_csv = csv.DictWriter(f, headers)
 				f_csv.writeheader()
 				for d, pe_ttm_d, pe_ttm_t, pb_d, pb_t, avg_t in zip(date[1:], pe_ttm[1:], pe_ttm_temperature,
@@ -68,7 +68,7 @@ def zhishu_temperature():
 					f_csv.writerow(row)
 		logger.info("{}的指数温度已完成计算........".format(zhishu_name))
 		latest_temperature.sort(key=lambda v: float(v['平均温度']))
-		with open("./latest_temperature.csv", "w", newline="") as f:
+		with open("./latest_temperature.csv", "w", encoding="gbk", newline="") as f:
 			f_csv = csv.DictWriter(f, latest_headers)
 			f_csv.writeheader()
 			f_csv.writerows(latest_temperature)
@@ -76,5 +76,3 @@ def zhishu_temperature():
 	except Exception as e:
 		logger.error(e)
 		logger.info("所有指数的指数温度已完成计算........")
-
-zhishu_temperature()
