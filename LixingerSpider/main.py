@@ -2,6 +2,7 @@ from datetime import datetime
 
 from spider_job import get_csv, logger
 from zhishu_temperature_job import zhishu_temperature
+from sendmail_job import sendCsv
 
 if __name__ == '__main__':
 	start = datetime.now()
@@ -11,3 +12,5 @@ if __name__ == '__main__':
 	start = datetime.now()
 	zhishu_temperature()
 	logger.info("完成所有指数的温度计算总耗时 {}".format(datetime.now() - start))
+
+	sendCsv("./latest_temperature.csv")

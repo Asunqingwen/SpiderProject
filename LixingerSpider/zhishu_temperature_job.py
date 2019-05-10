@@ -54,10 +54,10 @@ def zhishu_temperature():
                     headers.insert(2, "PE温度")
                     headers.insert(4, "PB温度")
                     headers.insert(5, "平均温度")
-            avg_temperature = [(pe + pb) / 2 for pe, pb in zip(pe_ttm_temperature, pb_temperature)]
-            latest_temperature.append(dict(zip(latest_headers,
-                                               [date[-1], zhishu_name, pe_ttm_temperature[-1], pb_temperature[-1],
-                                                avg_temperature[-1]])))
+                avg_temperature = [(pe + pb) / 2 for pe, pb in zip(pe_ttm_temperature, pb_temperature)]
+                latest_temperature.append(dict(zip(latest_headers,
+                                                   [date[-1], zhishu_name, pe_ttm_temperature[-1], pb_temperature[-1],
+                                                    avg_temperature[-1]])))
 
             with open(csv_path, "w", newline="") as f:
                 f_csv = csv.DictWriter(f, headers)
