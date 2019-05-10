@@ -3,7 +3,7 @@ from datetime import datetime
 import zmail
 
 emailName = '******@sina.com'
-password = '******'
+password = '*******'
 
 send_mail = ['******@sina.com']
 
@@ -17,4 +17,3 @@ def sendCsv(csv_path, jpg_path):
 
 	server = zmail.server(emailName, password)
 	server.send_mail(send_mail, mail_content)
-sendCsv("./latest_temperature.csv","./zhishu.jpg")
