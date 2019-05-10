@@ -1,5 +1,6 @@
 import csv
 import json
+import os
 
 import requests
 from tqdm import tqdm
@@ -20,9 +21,12 @@ pe_ttm_csv_payloadData = {"stockIds": "", "dateFlag": "week", "granularity": "f_
                           "metricNames": ["pe_ttm", "cp", "mc", "cmc"], "metricTypes": ["weightedAvg"]}
 pb_csv_payloadData = {"stockIds": "", "dateFlag": "week", "granularity": "f_s",
                       "metricNames": ["pb", "cp", "mc", "cmc"], "metricTypes": ["weightedAvg"]}
+ROOT_PATH = "CsvFiles"
 
 
 def get_csv():
+	if not os.path.exists(ROOT_PATH):
+		os.makedirs(ROOT_PATH)
 	r = requests.post(data_list_url, data=json.dumps(data_list_payloadData), headers=payloadHeader)
 	data_list = json.loads(r.text)
 	with tqdm(data_list) as data_list:
@@ -43,7 +47,7 @@ def get_csv():
 				pb_csv_data = reversed(pb_csv_data)
 
 				headers = ['date', 'pe_ttm', "pb"]
-				with open("./CsvFiles/{}.csv".format(zhishu_name), "w", newline="") as f:
+				with open(os.path.join(ROOT_PATH, "{}.csv".format(zhishu_name)), "w", newline="") as f:
 					f_csv = csv.DictWriter(f, headers)
 					f_csv.writeheader()
 					if zhishu_name != "恒生指数":

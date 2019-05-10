@@ -24,8 +24,6 @@ def normdist(data):
 
 def zhishu_temperature():
 	logger.info("开始计算所以指数的指数温度........")
-	if not os.path.exists(ROOT_PATH):
-		os.makedirs(ROOT_PATH)
 	files = os.listdir(ROOT_PATH)
 	logger.info("开始计算所以指数的指数温度........")
 	latest_temperature = list()
