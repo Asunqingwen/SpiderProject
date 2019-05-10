@@ -8,7 +8,6 @@ from tqdm import tqdm
 from logging_job import logger
 
 ROOT_PATH = "CsvFiles"
-files = os.listdir(ROOT_PATH)
 
 
 def normdist(data):
