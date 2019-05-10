@@ -1,15 +1,13 @@
 from datetime import datetime
 
 from apscheduler.schedulers.blocking import BlockingScheduler
+from apscheduler.triggers.cron import CronTrigger
 
 from sendmail_job import sendCsv
 from spider_job import get_csv, logger
 from zhishu_temperature_job import zhishu_temperature
 
-scheduler = BlockingScheduler()
 
-
-@scheduler.scheduled_job("cron",day_of_week=2,hour=15)
 def main_job():
 	start = datetime.now()
 	get_csv()
@@ -24,6 +22,9 @@ def main_job():
 
 if __name__ == '__main__':
 	try:
+		scheduler = BlockingScheduler()
+		trigger = CronTrigger(minute=1)
+		scheduler.add_job(main_job, trigger)
 		scheduler.start()
 	except(KeyboardInterrupt, SystemExit):
 		scheduler.shutdown()
