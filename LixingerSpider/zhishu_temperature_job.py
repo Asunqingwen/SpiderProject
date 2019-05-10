@@ -8,6 +8,7 @@ from tqdm import tqdm
 from logging_job import logger
 
 ROOT_PATH = "CsvFiles"
+lastest_temperature = "./latest_temperature.csv"
 
 
 def normdist(data):
@@ -78,4 +79,4 @@ def zhishu_temperature():
 		logger.error(e)
 		logger.info("所有指数的指数温度已完成计算........")
 
-# zhishu_temperature()
+zhishu_temperature()

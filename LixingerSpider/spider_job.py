@@ -62,4 +62,4 @@ def get_csv():
 								f_csv.writerow(row)
 			except Exception as e:
 				logger.error(e)
-			logger.info("{}的PE和PB数据已完成收集........".format(zhishu_name))
+				logger.info("{}的PE和PB数据已完成收集........".format(zhishu_name))
